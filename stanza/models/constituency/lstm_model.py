@@ -25,6 +25,12 @@ from stanza.models.constituency.parse_transitions import TransitionScheme
 from stanza.models.constituency.parse_tree import Tree
 from stanza.models.constituency.tree_stack import TreeStack
 from stanza.models.constituency.utils import build_nonlinearity
+from stanza.models.constituency.partitioned_transformer import (
+    ConcatPositionalEncoding,
+    FeatureDropout,
+    PartitionedTransformerEncoder,
+    PartitionedTransformerEncoderLayer,
+)
 
 logger = logging.getLogger('stanza')
 
@@ -91,8 +97,9 @@ class LSTMModel(BaseModel, nn.Module):
         self.tag_embedding_dim = self.args['tag_embedding_dim']
         self.transition_embedding_dim = self.args['transition_embedding_dim']
         self.delta_embedding_dim = self.args['delta_embedding_dim']
+        self.pattn_dim = self.args['pattn_d_model']
 
-        self.word_input_size = self.embedding_dim + self.tag_embedding_dim + self.delta_embedding_dim
+        self.word_input_size = self.embedding_dim + self.tag_embedding_dim + self.delta_embedding_dim + self.pattn_dim
 
         if bert_model is not None:
             if bert_tokenizer is None:
@@ -223,6 +230,43 @@ class LSTMModel(BaseModel, nn.Module):
         self.constituency_lstm = self.args['constituency_lstm']
 
         self._unary_limit = unary_limit
+
+        # Initializations of parameters for the Partitioned Attention
+        self.pattn_d_pretrained = self.bert_dim
+        self.pattn_d_model = self.args['pattn_d_model']
+        self.pattn_morpho_emb_dropout = self.args['pattn_morpho_emb_dropout']
+        self.pattn_encoder_max_len = self.args['pattn_encoder_max_len']
+        self.pattn_num_heads = self.args['pattn_num_heads']
+        self.pattn_d_kv = self.args['pattn_d_kv']
+        self.pattn_d_ff = self.args['pattn_d_ff']
+        self.pattn_relu_dropout = self.args['pattn_relu_dropout']
+        self.pattn_residual_dropout = self.args['pattn_residual_dropout']
+        self.pattn_attention_dropout = self.args['pattn_attention_dropout']
+        self.pattn_num_layers = self.args['pattn_num_layers']
+
+        # Initializations for the Partitioned Attention
+        self.project_pretrained = nn.Linear(
+            self.pattn_d_pretrained, self.pattn_d_model // 2, bias=False
+        )
+
+        self.pattention_morpho_emb_dropout = FeatureDropout(self.pattn_morpho_emb_dropout)
+        self.add_timing = ConcatPositionalEncoding(
+            d_model=self.pattn_d_model,
+            max_len=self.pattn_encoder_max_len,
+        )
+        encoder_layer = PartitionedTransformerEncoderLayer(
+            self.pattn_d_model,
+            n_head=self.pattn_num_heads,
+            d_qkv=self.pattn_d_kv,
+            d_ff=self.pattn_d_ff,
+            ff_dropout=self.pattn_relu_dropout,
+            residual_dropout=self.pattn_residual_dropout,
+            attention_dropout=self.pattn_attention_dropout,
+        )
+        self.encoder= PartitionedTransformerEncoder(
+            encoder_layer, self.pattn_num_layers
+        )
+
 
     def num_words_known(self, words):
         return sum(word in self.vocab_map or word.lower() in self.vocab_map for word in words)
@@ -392,6 +436,45 @@ class LSTMModel(BaseModel, nn.Module):
         # Each tensor holds the representation of a sentence extracted from phobert
         return processed
 
+    def partitioned_attention(self, attention_mask, bert_embeddings):
+        """
+        Partitioned Self Attention layer
+        This can take in an attention_mask for the normal BERT, for
+        phobert, the attention_mask will be obtained from the phobert_embeddings
+        """
+        # Prepares attention mask for feeding into the self-attention
+        if attention_mask:
+            valid_token_mask = attention_mask
+        else:
+            valids = []
+            for sent in bert_embeddings:
+                valids.append(torch.ones(len(sent)))
+
+            padded_data = torch.nn.utils.rnn.pad_sequence(
+                valids,
+                batch_first=True,
+                padding_value=-100
+            )
+
+            valid_token_mask = padded_data != -100
+
+        valid_token_mask = valid_token_mask.to(device="cuda:0")
+        padded_embeddings = torch.nn.utils.rnn.pad_sequence(
+            bert_embeddings,
+            batch_first=True,
+            padding_value=0
+        )
+
+        # Project the pretrained embedding onto the desired dimension
+        extra_content_annotations = self.project_pretrained(padded_embeddings)
+
+        # Add positional information through the table
+        encoder_in = self.add_timing(self.pattention_morpho_emb_dropout(extra_content_annotations))
+        # Put the partitioned input through the partitioned attention
+        annotations = self.encoder(encoder_in, valid_token_mask)
+
+        return annotations
+
     def initial_word_queues(self, tagged_word_lists):
         """
         Produce initial word queues out of the model's LSTMs for use in the tagged word lists.
@@ -420,6 +503,9 @@ class LSTMModel(BaseModel, nn.Module):
             else:
                 bert_embeddings = self.extract_bert_embeddings(self.bert_tokenizer, self.bert_model, all_word_labels, device)
 
+        # Extract partitioned representation
+        partitioned_embeddings = self.partitioned_attention(None, bert_embeddings)
+
         for sentence_idx, tagged_words in enumerate(tagged_word_lists):
             word_labels = all_word_labels[sentence_idx]
             word_idx = torch.stack([self.vocab_tensors[map_word(word.children[0].label)] for word in tagged_words])
@@ -434,7 +520,8 @@ class LSTMModel(BaseModel, nn.Module):
             delta_idx = torch.stack([self.delta_tensors[self.delta_word_map.get(word, UNK_ID)] for word in delta_labels])
 
             delta_input = self.delta_embedding(delta_idx)
-            word_inputs = [word_input, delta_input]
+            partitioned_input = partitioned_embeddings[sentence_idx][1:(word_input.shape[0]+1), :]
+            word_inputs = [word_input, delta_input, partitioned_input]
 
             if self.bert_model is not None:
                 bert_input = bert_embeddings[sentence_idx][1:-1]
