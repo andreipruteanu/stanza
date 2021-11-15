@@ -658,9 +658,24 @@ class LSTMModel(BaseModel, nn.Module):
         return constituent_node.value
 
     def push_transitions(self, transition_stacks, transitions):
-        mapped = [self.transition_map.get(t, self.transition_map.get(t[0], None)) for t in transitions]
-        transition_idx = torch.stack([self.transition_tensors[transition] for transition in mapped])
-        transition_input = self.transition_embedding(transition_idx).unsqueeze(0)
+        """
+        Push all of the given transitions on to the stack as a batch operations.
+
+        Significantly faster than doing one transition at a time.
+
+        The transitions are pairs of (transition, data) where data can
+        be None or can be used to choose a labeled form of the
+        transition.  If a labeled form of the transition is given,
+        it is averaged with the base form of the same transition.
+        """
+        half_mapped = [self.transition_map[t[0]] for t in transitions]
+        full_mapped = [self.transition_map.get(t, None) for t in transitions]
+        transition_input = [(self.transition_embedding(self.transition_tensors[half]) +
+                             self.transition_embedding(self.transition_tensors[full])) / 2 if full is not None
+                            else self.transition_embedding(self.transition_tensors[half])
+                            for half, full in zip(half_mapped, full_mapped)]
+        transition_input = torch.stack(transition_input).unsqueeze(0)
+        # transition_input is now 1 x batch x dim
         transition_input = self.lstm_input_dropout(transition_input)
 
         hx = torch.cat([t.value.hx for t in transition_stacks], axis=1)
