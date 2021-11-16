@@ -1,7 +1,8 @@
-import torch
-import torch.nn as nn
+# import torch
+# import torch.nn as nn
 
-class WordDropout(nn.Module):
+# class WordDropout(nn.Module):
+class WordDropout:
     """ A word dropout layer that's designed for embedded inputs (e.g., any inputs to an LSTM layer).
     Given a batch of embedded inputs, this layer randomly set some of them to be a replacement state.
     Note that this layer assumes the last dimension of the input to be the hidden dimension of a unit.
@@ -27,7 +28,8 @@ class WordDropout(nn.Module):
     def extra_repr(self):
         return 'p={}'.format(self.dropprob)
 
-class LockedDropout(nn.Module):
+# class LockedDropout(nn.Module):
+class LockedDropout:
     """
     A variant of dropout layer that consistently drops out the same parameters over time. Also known as the variational dropout. 
     This implementation was modified from the LockedDropout implementation in the flair library (https://github.com/zalandoresearch/flair).
@@ -52,7 +54,8 @@ class LockedDropout(nn.Module):
     def extra_repr(self):
         return 'p={}'.format(self.dropprob)
 
-class SequenceUnitDropout(nn.Module):
+# class SequenceUnitDropout(nn.Module):
+class SequenceUnitDropout:
     """ A unit dropout layer that's designed for input of sequence units (e.g., word sequence, char sequence, etc.).
     Given a sequence of unit indices, this layer randomly set some of them to be a replacement id (usually set to be <UNK>).
     """

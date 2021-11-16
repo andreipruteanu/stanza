@@ -3,7 +3,7 @@ import numpy as np
 import os
 from collections import Counter
 import logging
-import torch
+# import torch
 
 import stanza.models.common.seq2seq_constant as constant
 from stanza.models.common.data import map_to_ids, get_long_tensor, get_float_tensor, sort_all

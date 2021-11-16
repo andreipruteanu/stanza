@@ -1,13 +1,14 @@
-import torch
-import torch.nn as nn
-from torch.nn.utils.rnn import pack_sequence, pad_packed_sequence, pack_padded_sequence, PackedSequence
+# import torch
+# import torch.nn as nn
+# from torch.nn.utils.rnn import pack_sequence, pad_packed_sequence, pack_padded_sequence, PackedSequence
 
 from stanza.models.common.packed_lstm import PackedLSTM
 from stanza.models.common.utils import tensor_unsort, unsort
 from stanza.models.common.dropout import SequenceUnitDropout
 from stanza.models.common.vocab import UNK_ID, CharVocab
 
-class CharacterModel(nn.Module):
+# class CharacterModel(nn.Module):
+class CharacterModel:
     def __init__(self, args, vocab, pad=False, bidirectional=False, attention=True):
         super().__init__()
         self.args = args
@@ -56,7 +57,8 @@ class CharacterModel(nn.Module):
 
         return res
 
-class CharacterLanguageModel(nn.Module):
+# class CharacterLanguageModel(nn.Module):
+class CharacterLanguageModel:
 
     def __init__(self, args, vocab, pad=False, is_forward_lm=True):
         super().__init__()

@@ -11,9 +11,9 @@ from collections import namedtuple
 import logging
 from operator import itemgetter
 import random
-import torch
-import torch.nn as nn
-from torch.nn.utils.rnn import pack_padded_sequence
+# import torch
+# import torch.nn as nn
+# from torch.nn.utils.rnn import pack_padded_sequence
 
 from stanza.models.common.data import get_long_tensor
 from stanza.models.common.utils import unsort
@@ -38,7 +38,8 @@ ConstituentNode = namedtuple("ConstituentNode", ['value', 'output', 'hx', 'cx'])
 Constituent = namedtuple("Constituent", ['value', 'hx'])
 
 
-class LSTMModel(BaseModel, nn.Module):
+# class LSTMModel(BaseModel, nn.Module):
+class LSTMModel(BaseModel):
     def __init__(self, pretrain, forward_charlm, backward_charlm, transitions, constituents, tags, words, rare_words, root_labels, open_nodes, args):
         """
         pretrain: a Pretrain object

@@ -1,5 +1,5 @@
 from enum import Enum
-import torch
+# import torch
 
 """
 Defines some args which are common between the classifier model(s) and tools which use them

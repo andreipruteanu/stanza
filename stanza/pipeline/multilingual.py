@@ -2,7 +2,7 @@
 Class for running multilingual pipelines
 """
 
-import torch
+# import torch
 
 from stanza.models.common.doc import Document
 from stanza.pipeline.core import Pipeline

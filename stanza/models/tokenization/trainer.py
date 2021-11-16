@@ -1,8 +1,8 @@
 import sys
 import logging
-import torch
-import torch.nn as nn
-import torch.optim as optim
+# import torch
+# import torch.nn as nn
+# import torch.optim as optim
 
 from stanza.models.common.trainer import Trainer as BaseTrainer
 from stanza.models.tokenization.utils import create_dictionary

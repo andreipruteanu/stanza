@@ -6,9 +6,9 @@ import sys
 import numpy as np
 from collections import Counter
 import logging
-import torch
-from torch import nn
-import torch.nn.init as init
+# import torch
+# from torch import nn
+# import torch.nn.init as init
 
 import stanza.models.common.seq2seq_constant as constant
 from stanza.models.common.seq2seq_model import Seq2SeqModel

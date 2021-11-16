@@ -4,8 +4,8 @@ Different loss functions.
 
 import logging
 import numpy as np
-import torch
-import torch.nn as nn
+# import torch
+# import torch.nn as nn
 
 import stanza.models.common.seq2seq_constant as constant
 
@@ -36,7 +36,8 @@ def weighted_cross_entropy_loss(labels, log_dampened=False):
     )
     return loss
 
-class MixLoss(nn.Module):
+# class MixLoss(nn.Module):
+class MixLoss:
     """
     A mixture of SequenceLoss and CrossEntropyLoss.
     Loss = SequenceLoss + alpha * CELoss
@@ -54,7 +55,8 @@ class MixLoss(nn.Module):
         loss = sl + self.alpha * cel
         return loss
 
-class MaxEntropySequenceLoss(nn.Module):
+# class MaxEntropySequenceLoss(nn.Module):
+class MaxEntropySequenceLoss:
     """
     A max entropy loss that encourage the model to have large entropy,
     therefore giving more diverse outputs.

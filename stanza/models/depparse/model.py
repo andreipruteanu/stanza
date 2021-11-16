@@ -1,8 +1,8 @@
 import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, pack_sequence, PackedSequence
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
+# from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, pack_sequence, PackedSequence
 
 from stanza.models.common.biaffine import DeepBiaffineScorer
 from stanza.models.common.hlstm import HighwayLSTM
@@ -10,7 +10,8 @@ from stanza.models.common.dropout import WordDropout
 from stanza.models.common.vocab import CompositeVocab
 from stanza.models.common.char_model import CharacterModel
 
-class Parser(nn.Module):
+# class Parser(nn.Module):
+class Parser:
     def __init__(self, args, vocab, emb_matrix=None, share_hid=False):
         super().__init__()
 

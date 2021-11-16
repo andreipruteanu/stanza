@@ -7,7 +7,7 @@ import re
 import lzma
 import logging
 import numpy as np
-import torch
+# import torch
 
 from .vocab import BaseVocab, VOCAB_PREFIX
 

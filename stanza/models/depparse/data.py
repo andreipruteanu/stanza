@@ -1,6 +1,6 @@
 import random
 import logging
-import torch
+# import torch
 
 from stanza.models.common.data import map_to_ids, get_long_tensor, get_float_tensor, sort_all
 from stanza.models.common.vocab import PAD_ID, VOCAB_PREFIX, ROOT_ID, CompositeVocab, CharVocab

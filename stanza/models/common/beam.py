@@ -1,5 +1,5 @@
 from __future__ import division
-import torch
+# import torch
 
 import stanza.models.common.seq2seq_constant as constant
 

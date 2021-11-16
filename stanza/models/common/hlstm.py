@@ -1,11 +1,12 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, pack_sequence, PackedSequence
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
+# from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, pack_sequence, PackedSequence
 
 from stanza.models.common.packed_lstm import PackedLSTM
 
-class HLSTMCell(nn.modules.rnn.RNNCellBase):
+# class HLSTMCell(nn.modules.rnn.RNNCellBase):
+class HLSTMCell:
     """
     A Highway LSTM Cell as proposed in Zhang et al. (2018) Highway Long Short-Term Memory RNNs for 
     Distant Speech Recognition.
@@ -52,7 +53,8 @@ class HLSTMCell(nn.modules.rnn.RNNCellBase):
         return h, c
 
 # Highway LSTM network, does NOT use the HLSTMCell above
-class HighwayLSTM(nn.Module):
+# class HighwayLSTM(nn.Module):
+class HighwayLSTM:
     """
     A Highway LSTM network, as used in the original Tensorflow version of the Dozat parser. Note that this
     is independent from the HLSTMCell above.

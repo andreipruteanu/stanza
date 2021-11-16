@@ -1,8 +1,9 @@
-import torch
-import torch.nn.functional as F
-import torch.nn as nn
+# import torch
+# import torch.nn.functional as F
+# import torch.nn as nn
 
-class Tokenizer(nn.Module):
+# class Tokenizer(nn.Module):
+class Tokenizer:
     def __init__(self, args, nchars, emb_dim, hidden_dim, dropout, feat_dropout):
         super().__init__()
 

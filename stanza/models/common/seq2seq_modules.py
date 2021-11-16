@@ -3,8 +3,8 @@ Pytorch implementation of basic sequence to Sequence modules.
 """
 
 import logging
-import torch
-import torch.nn as nn
+# import torch
+# import torch.nn as nn
 import math
 import numpy as np
 
@@ -12,7 +12,8 @@ import stanza.models.common.seq2seq_constant as constant
 
 logger = logging.getLogger('stanza')
 
-class BasicAttention(nn.Module):
+# class BasicAttention(nn.Module):
+class BasicAttention:
     """
     A basic MLP attention layer.
     """
@@ -52,7 +53,8 @@ class BasicAttention(nn.Module):
 
         return h_tilde, attn
 
-class SoftDotAttention(nn.Module):
+# class SoftDotAttention(nn.Module):
+class SoftDotAttention:
     """Soft Dot Attention.
 
     Ref: http://www.aclweb.org/anthology/D15-1166
@@ -103,7 +105,8 @@ class SoftDotAttention(nn.Module):
         return h_tilde, attn
 
 
-class LinearAttention(nn.Module):
+# class LinearAttention(nn.Module):
+class LinearAttention:
     """ A linear attention form, inspired by BiDAF:
         a = W (u; v; u o v)
     """
@@ -145,7 +148,8 @@ class LinearAttention(nn.Module):
         h_tilde = self.tanh(self.linear_out(h_tilde))
         return h_tilde, attn
 
-class DeepAttention(nn.Module):
+# class DeepAttention(nn.Module):
+class DeepAttention:
     """ A deep attention form, invented by Robert:
         u = ReLU(Wx)
         v = ReLU(Wy)
@@ -191,7 +195,8 @@ class DeepAttention(nn.Module):
         h_tilde = self.tanh(self.linear_out(h_tilde))
         return h_tilde, attn
 
-class LSTMAttention(nn.Module):
+# class LSTMAttention(nn.Module):
+class LSTMAttention:
     r"""A long short-term memory (LSTM) cell with attention."""
 
     def __init__(self, input_size, hidden_size, batch_first=True, attn_type='soft'):

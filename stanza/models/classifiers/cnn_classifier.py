@@ -4,9 +4,9 @@ import re
 from types import SimpleNamespace
 
 import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
 
 import stanza.models.classifiers.classifier_args as classifier_args
 import stanza.models.classifiers.data as data
@@ -40,7 +40,8 @@ help, but dev performance went down for each variation of
 
 logger = logging.getLogger('stanza')
 
-class CNNClassifier(nn.Module):
+# class CNNClassifier(nn.Module):
+class CNNClassifier:
     def __init__(self, pretrain, extra_vocab, labels,
                  charmodel_forward, charmodel_backward,
                  args):

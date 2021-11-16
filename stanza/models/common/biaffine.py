@@ -1,8 +1,9 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
 
-class PairwiseBilinear(nn.Module):
+# class PairwiseBilinear(nn.Module):
+class PairwiseBilinear:
     ''' A bilinear module that deals with broadcasting for efficient memory usage.
     Input: tensors of sizes (N x L1 x D1) and (N x L2 x D2)
     Output: tensor of size (N x L1 x L2 x O)'''
@@ -32,7 +33,8 @@ class PairwiseBilinear(nn.Module):
 
         return output
 
-class BiaffineScorer(nn.Module):
+# class BiaffineScorer(nn.Module):
+class BiaffineScorer:
     def __init__(self, input1_size, input2_size, output_size):
         super().__init__()
         self.W_bilin = nn.Bilinear(input1_size + 1, input2_size + 1, output_size)
@@ -45,7 +47,8 @@ class BiaffineScorer(nn.Module):
         input2 = torch.cat([input2, input2.new_ones(*input2.size()[:-1], 1)], len(input2.size())-1)
         return self.W_bilin(input1, input2)
 
-class PairwiseBiaffineScorer(nn.Module):
+# class PairwiseBiaffineScorer(nn.Module):
+class PairwiseBiaffineScorer:
     def __init__(self, input1_size, input2_size, output_size):
         super().__init__()
         self.W_bilin = PairwiseBilinear(input1_size + 1, input2_size + 1, output_size)
@@ -58,8 +61,10 @@ class PairwiseBiaffineScorer(nn.Module):
         input2 = torch.cat([input2, input2.new_ones(*input2.size()[:-1], 1)], len(input2.size())-1)
         return self.W_bilin(input1, input2)
 
-class DeepBiaffineScorer(nn.Module):
-    def __init__(self, input1_size, input2_size, hidden_size, output_size, hidden_func=F.relu, dropout=0, pairwise=True):
+# class DeepBiaffineScorer(nn.Module):
+class DeepBiaffineScorer:
+    # def __init__(self, input1_size, input2_size, hidden_size, output_size, hidden_func=F.relu, dropout=0, pairwise=True):
+    def __init__(self, input1_size, input2_size, hidden_size, output_size, hidden_func=None, dropout=0, pairwise=True):
         super().__init__()
         self.W1 = nn.Linear(input1_size, hidden_size)
         self.W2 = nn.Linear(input2_size, hidden_size)

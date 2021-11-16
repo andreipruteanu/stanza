@@ -5,7 +5,7 @@ Processor for determining language of text.
 import emoji
 import re
 import stanza
-import torch
+# import torch
 
 from stanza.models.common.doc import Document
 from stanza.models.langid.model import LangIDBiLSTM
@@ -32,7 +32,7 @@ class LangIDProcessor(UDProcessor):
         batch_size = config.get("batch_size", 64)
         self._model = LangIDBiLSTM.load(path=config["model_path"], use_cuda=use_gpu,
                                         batch_size=batch_size, lang_subset=config.get("lang_subset"))
-        self._device = torch.device("cuda") if use_gpu else None
+        self._device = 0  # torch.device("cuda") if use_gpu else None
         self._char_index = self._model.char_to_idx
         self._clean_text = config.get("clean_text")
 

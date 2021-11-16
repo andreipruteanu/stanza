@@ -1,9 +1,10 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, pack_sequence, PackedSequence
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
+# from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, pack_sequence, PackedSequence
 
-class PackedLSTM(nn.Module):
+# class PackedLSTM(nn.Module):
+class PackedLSTM:
     def __init__(self, input_size, hidden_size, num_layers, bias=True, batch_first=False, dropout=0, bidirectional=False, pad=False, rec_dropout=0):
         super().__init__()
 
@@ -24,7 +25,8 @@ class PackedLSTM(nn.Module):
             res = (pad_packed_sequence(res[0], batch_first=self.batch_first)[0], res[1])
         return res
 
-class LSTMwRecDropout(nn.Module):
+# class LSTMwRecDropout(nn.Module):
+class LSTMwRecDropout:
     """ An LSTM implementation that supports recurrent dropout """
     def __init__(self, input_size, hidden_size, num_layers, bias=True, batch_first=False, dropout=0, bidirectional=False, pad=False, rec_dropout=0):
         super().__init__()

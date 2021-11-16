@@ -4,8 +4,8 @@ A trainer class to handle training and testing of models.
 
 import sys
 import logging
-import torch
-from torch import nn
+# import torch
+# from torch import nn
 
 from stanza.models.common.trainer import Trainer as BaseTrainer
 from stanza.models.common import utils, loss

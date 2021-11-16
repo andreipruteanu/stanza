@@ -1,8 +1,9 @@
-import torch
-import torch.nn as nn
+# import torch
+# import torch.nn as nn
 
 
-class LangIDBiLSTM(nn.Module):
+# class LangIDBiLSTM(nn.Module):
+class LangIDBiLSTM:
     """
     Multi-layer BiLSTM model for language detecting. A recreation of "A reproduction of Apple's bi-directional LSTM models
     for language identification in short strings." (Toftrup et al 2021)

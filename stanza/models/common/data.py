@@ -5,7 +5,7 @@ Utility functions for data transformations.
 import logging
 import random
 
-import torch
+# import torch
 
 import stanza.models.common.seq2seq_constant as constant
 from stanza.models.common.doc import HEAD, ID, UPOS

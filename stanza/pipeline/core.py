@@ -5,7 +5,7 @@ Pipeline that runs tokenize,mwt,pos,lemma,depparse
 import io
 import itertools
 import sys
-import torch
+# import torch
 import logging
 import json
 import os
@@ -119,7 +119,7 @@ class Pipeline:
 
         # configs that are the same for all processors
         pipeline_level_configs = {'lang': lang, 'mode': 'predict'}
-        self.use_gpu = torch.cuda.is_available() and use_gpu
+        self.use_gpu = False  # torch.cuda.is_available() and use_gpu
         logger.info("Use device: {}".format("gpu" if self.use_gpu else "cpu"))
 
         # set up processors

@@ -4,7 +4,7 @@ import numpy as np
 import random
 import logging
 import re
-import torch
+# import torch
 from .vocab import Vocab
 logger = logging.getLogger('stanza')
 

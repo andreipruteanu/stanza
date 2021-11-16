@@ -9,7 +9,7 @@ import json
 import sys
 import unicodedata
 
-import torch
+# import torch
 import numpy as np
 
 from stanza.models.common.constant import lcode2lang

@@ -14,9 +14,9 @@ import logging
 import random
 import os
 
-import torch
-from torch import nn
-from torch import optim
+# import torch
+# from torch import nn
+# from torch import optim
 
 from stanza.models.common import pretrain
 from stanza.models.common import utils

@@ -3,9 +3,9 @@ The full encoder-decoder model, built on top of the base seq2seq modules.
 """
 
 import logging
-import torch
-from torch import nn
-import torch.nn.functional as F
+# import torch
+# from torch import nn
+# import torch.nn.functional as F
 import numpy as np
 
 import stanza.models.common.seq2seq_constant as constant
@@ -15,7 +15,8 @@ from stanza.models.common.beam import Beam
 
 logger = logging.getLogger('stanza')
 
-class Seq2SeqModel(nn.Module):
+# class Seq2SeqModel(nn.Module):
+class Seq2SeqModel:
     """
     A complete encoder-decoder model, with optional attention.
     """
